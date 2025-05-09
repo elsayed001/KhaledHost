@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment - Vulnerability Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: #1a1a1a;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .assessment-container {
+            margin-top: 40px;
+        }
+        .assessment-card {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        .assessment-card:hover {
+            background: #333;
+            transform: scale(1.05);
+        }
+        .assessment-content {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .question-header {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .option-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding: 15px;
+            background: #222;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            font-size: 1.2rem;
+        }
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #final-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<body>
+    <div id="navbar-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+
+<!-- Hero Section -->
+<header class="hero">
+    <h1>Cybersecurity Assessments</h1>
+    <p>Evaluate your skills with interactive cybersecurity questions.</p>
+</header>
+
+<!-- Assessment Sets -->
+<div class="container assessment-container" id="assessments">
+    <h2 class="text-center mb-4">Select an Assessment</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="assessment-card" onclick="startAssessment(1)">
+                <h4>Intro to Linux</h4>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="assessment-card" onclick="startAssessment(2)">
+                <h4>Compression & Decompression</h4>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="assessment-card" onclick="startAssessment(3)">
+                <h4>File Permissions & User Management</h4>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="assessment-card" onclick="startAssessment(4)">
+                <h4>Process Management & Monitoring</h4>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="assessment-card" onclick="startAssessment(5)">
+                <h4>Networking & Services</h4>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="assessment-card" onclick="startAssessment(6)">
+                <h4>Wget Challenge: Encrypt</h4>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="assessment-card" onclick="startAssessment(7)">
+                <h4>Wget: Capture The Flag</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="assessment-content" class="assessment-content mt-4"></div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+        <p class="mb-0">&copy; 2025 Vulnerability Simulation. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    let currentQuestion = 0, totalScore = 0, selectedSet = 1;
+    let userAnswers = [], feedbackMessages = [];
+
+    const questionSets = {
+        1: [
+            "What command creates an empty file?",
+            "Which command lists all files including hidden ones?",
+            "How do you create a new directory?",
+            "What command moves a file to a different directory?",
+            "How do you view the contents of a file?"
+        ],
+        2: [
+            "Which command compresses files into a zip archive?",
+            "How do you extract files from a tar.gz archive?",
+            "What is the command to compress a file using gzip?",
+            "Which command decompresses a .bz2 file?",
+            "How can you view the contents of an archive without extracting it?"
+        ],
+        3: [
+            "What command changes file permissions?",
+            "Which command changes file ownership?",
+            "What command creates a new user?",
+            "Which command adds a user to a group?",
+            "How do you delete a user from the system?"
+        ],
+        4: [
+            "Which command lists all running processes?",
+            "How do you find a process by name?",
+            "Which command kills a process by PID?",
+            "How do you monitor system resource usage?",
+            "Which command shows the top 5 CPU processes?"
+        ],
+        5: [
+            "How do you check the system's IP address?",
+            "Which command lists open ports?",
+            "How do you test connectivity to google.com?",
+            "Which tool resolves DNS names?",
+            "What command traces the path to a remote server?"
+        ],
+        6: [
+            "Which command downloads files from a URL?",
+            "How do you unzip a .zip file?",
+            "How do you search a directory for the string 'FLAG{'?",
+            "How do you unzip a password-protected zip file?",
+            "What command reads the contents of flag.txt?"
+        ],
+        7: [
+            "What command decodes base64?",
+            "How do you search a file for the word 'FLAG'?",
+            "Which command lists hidden files?",
+            "How do you read a script file like config.sh?",
+            "How do you compare two flag files?"
+        ],
+        8: [
+            "Placeholder Q1?",
+            "Placeholder Q2?",
+            "Placeholder Q3?",
+            "Placeholder Q4?",
+            "Placeholder Q5?"
+        ]
+    };
+
+    const options = {
+        1: [["touch", "ls", "mkdir", "mv"], ["ls", "ls -a", "cat", "pwd"], ["rm", "mkdir", "cd", "mv"], ["cat", "mv", "cp", "touch"], ["echo", "cat", "ls", "grep"]],
+        2: [["zip", "tar", "gzip", "xz"], ["unzip", "tar -xzf", "gzip", "bunzip2"], ["gzip", "zip", "tar", "xz"], ["gunzip", "bunzip2", "unzip", "tar -xjf"], ["cat", "tar -tzf", "ls", "unzip"]],
+        3: [["chmod", "chown", "touch", "cat"], ["chown", "chmod", "mv", "rm"], ["useradd", "passwd", "groupadd", "usermod"], ["usermod -aG", "chmod", "mkdir", "ls"], ["userdel", "rmuser", "deluser", "remove"]],
+        4: [["ps aux", "top", "jobs", "ls"], ["ps aux | grep", "kill", "htop", "netstat"], ["kill", "exit", "rm", "delete"], ["top", "df", "ps", "ls"], ["ps aux --sort=-%cpu | head -5", "top", "jobs", "nice"]],
+        5: [["ip a", "ifconfig", "ping", "hostname"], ["ss -tuln", "ls", "netstat", "ping"], ["ping", "curl", "nslookup", "dig"], ["dig", "nslookup", "ip", "ping"], ["traceroute", "ping", "route", "curl"]],
+        6: [["wget", "curl", "scp", "rsync"], ["unzip", "tar", "gzip", "xz"], ["grep -r 'FLAG{' .", "cat", "ls", "find"], ["unzip -P", "zip -P", "tar -P", "extract"], ["cat", "less", "more", "open"]],
+        7: [["base64 -d", "decode", "cat", "hexdump"], ["grep", "find", "search", "awk"], ["ls -a", "ls", "cat", "mv"], ["cat config.sh", "open", "less", "nano config.sh"], ["cat", "diff", "cmp", "grep"]],
+        8: [["a", "b", "c", "d"], ["a", "b", "c", "d"], ["a", "b", "c", "d"], ["a", "b", "c", "d"], ["a", "b", "c", "d"]]
+    };
+
+    const correctAnswers = {
+        1: ["touch", "ls -a", "mkdir", "mv", "cat"],
+        2: ["zip", "tar -xzf", "gzip", "bunzip2", "tar -tzf"],
+        3: ["chmod", "chown", "useradd", "usermod -aG", "userdel"],
+        4: ["ps aux", "ps aux | grep", "kill", "top", "ps aux --sort=-%cpu | head -5"],
+        5: ["ip a", "ss -tuln", "ping", "dig", "traceroute"],
+        6: ["wget", "unzip", "grep -r 'FLAG{' .", "unzip -P", "cat"],
+        7: ["base64 -d", "grep", "ls -a", "cat config.sh", "diff"],
+        8: ["a", "b", "c", "d", "a"]
+    };
+
+    const helpTopics = {
+        "touch": "Try learning about the 'touch' command in Linux. Visit our challenge page for hands-on examples.",
+        "ls -a": "This command shows hidden files. If unsure, explore our Linux Basics challenges.",
+        "mkdir": "Creating directories is essential. Review the file management challenges to understand usage.",
+        "mv": "Used to move or rename files. Go through our file navigation tasks to practice this.",
+        "cat": "Used to read files. You can revisit the challenge that involves reading notes.txt.",
+        "zip": "Used for compressing files. Check our compression-related challenges to practice.",
+        "tar -xzf": "Use this for extracting .tar.gz files. The archive challenges explain this well.",
+        "gzip": "A compression tool. You can review exercises involving gzip compression.",
+        "bunzip2": "Use this to decompress .bz2 files. Check our decompression tasks for examples.",
+        "tar -tzf": "Lists contents of tar.gz files. Try the archive viewing challenges to understand better.",
+        "chmod": "Updates file permissions. The user permissions challenge set explains this in depth.",
+        "chown": "Changes file ownership. Explore user and group management exercises.",
+        "useradd": "Used to create users. It's explained in our user management simulations.",
+        "usermod -aG": "Adds a user to a group. This is part of our permissions and user control section.",
+        "userdel": "Used to delete users. Try the related challenge to understand its impact.",
+        "ps aux": "Lists running processes. This is covered in our process management section.",
+        "ps aux | grep": "Used to filter processes. Try the process search challenge for more practice.",
+        "kill": "Terminates a process. Go over the challenge that teaches how to handle stuck processes.",
+        "top": "Displays real-time resource usage. Our system monitoring task uses this.",
+        "ps aux --sort=-%cpu | head -5": "Finds top CPU-consuming processes. Review the performance sorting challenges.",
+        "ip a": "Displays network interfaces. Covered in the networking basics challenge.",
+        "ss -tuln": "Shows listening ports. The networking challenges will guide you on this.",
+        "ping": "Tests connectivity. Try the challenge involving pinging Google.",
+        "dig": "Performs DNS lookups. Check the DNS resolution challenge.",
+        "traceroute": "Traces the path to a server. Learn this in our routing challenges.",
+        "wget": "Used to download files. The 'wget and unzip' challenge provides a full demo.",
+        "unzip": "Extracts zip archives. Covered in our archive management section.",
+        "grep -r 'FLAG{' .": "Searches files recursively. Try the flag-finding challenge.",
+        "unzip -P": "Used to extract password-protected zips. Revisit the encrypted archive task.",
+        "base64 -d": "Decodes base64 strings. Check the encoding-decoding challenge for help.",
+        "grep": "Search through files. You can revisit any search-related exercises.",
+        "cat config.sh": "Displays script contents. Look back at the config review challenge.",
+        "diff": "Compares two files. This is used in our file comparison challenge."
+    };
+
+
+    function startAssessment(set) {
+        selectedSet = set;
+        totalScore = 0;
+        currentQuestion = 0;
+        userAnswers = [];
+        feedbackMessages = [];
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        if (currentQuestion > 0) {
+            const selectedOption = document.querySelector("input[name='q']:checked");
+            if (selectedOption) {
+                const answer = selectedOption.value;
+                const correct = correctAnswers[selectedSet][currentQuestion - 1];
+                userAnswers.push(answer);
+                if (answer === correct) {
+                    totalScore += 5;
+                    feedbackMessages.push("✅ Q" + currentQuestion + ": Correct!");
+                } else {
+                    const topic = helpTopics[correct] || "Review the related Linux command.";
+                    feedbackMessages.push(`❌ Q${currentQuestion}: Your answer: "${answer}".<br><em>Tip:</em> ${topic}`);
+
+                }
+            } else {
+                userAnswers.push("None");
+                feedbackMessages.push(`❌ Q${currentQuestion}: No answer selected.`);
+            }
+        }
+
+        if (currentQuestion >= questionSets[selectedSet].length) {
+            document.getElementById("assessment-content").innerHTML = `<h2 id="final-score">Final Score: ${totalScore} / ${questionSets[selectedSet].length * 5}</h2>` +
+                feedbackMessages.map(msg => `<p>${msg}</p>`).join('');
+            return;
+        }
+
+        const question = questionSets[selectedSet][currentQuestion];
+        const choices = options[selectedSet][currentQuestion];
+
+        document.getElementById("assessment-content").innerHTML = `
+            <h2 class="question-header">${question}</h2>
+            <div class="option-container">
+                ${choices.map(choice => `<label><input type="radio" name="q" value="${choice}"> ${choice}</label>`).join('')}
+            </div>
+            <button class="submit-btn" onclick="nextQuestion()" disabled>Next</button>
+        `;
+
+        document.querySelectorAll("input[name='q']").forEach(input => {
+            input.addEventListener("change", () => document.querySelector(".submit-btn").disabled = false);
+        });
+
+        currentQuestion++;
+    }
+</script>
+<script>
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navbar-container").innerHTML = html;
+  
+        // 🔁 Manually run the login logic after navbar is loaded
+        const name = sessionStorage.getItem("firstName");
+        const welcomeSpan = document.getElementById("userWelcome");
+        const loggedInMenu = document.getElementById("loggedInMenu");
+        const guestMenu = document.getElementById("guestMenu");
+  
+        if (name) {
+          if (welcomeSpan) welcomeSpan.innerText = name;
+          if (loggedInMenu) loggedInMenu.style.display = "block";
+          if (guestMenu) guestMenu.style.display = "none";
+        } else {
+          if (welcomeSpan) welcomeSpan.innerText = "";
+          if (loggedInMenu) loggedInMenu.style.display = "none";
+          if (guestMenu) guestMenu.style.display = "block";
+        }
+      });
+  
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

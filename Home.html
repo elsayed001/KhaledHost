@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Vulnerability Simulation Dashboard">
+    <title>Home - Vulnerability Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<!-- Navbar -->
+<body>
+    <div id="navbar-container"></div>
+</body>
+
+
+<!-- Hero Section -->
+<header class="bg-dark text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4">Test Your Cybersecurity Skills!</h1>
+        <p class="lead">Explore, defend, and secure systems through real-world vulnerability simulations.</p>
+        <a href="challenges.html" class="btn btn-primary btn-lg">Start Simulation</a>
+        <a href="guidelines.html" class="btn btn-outline-light btn-lg">Learn More</a>
+    </div>
+</header>
+
+<!-- Features Section -->
+<section class="container text-center my-5">
+    <h2 class="mb-4">Why Choose Our Simulator?</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+            <h4 class="mt-3">Real-World Commands</h4>
+            <p>Engage in hands-on Linux command simulations to further your tech knowledge.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-gamepad fa-3x text-success"></i>
+            <h4 class="mt-3">Scored assessments</h4>
+            <p>Earn points through assessments after each challenge to find where you could improve.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-chart-line fa-3x text-danger"></i>
+            <h4 class="mt-3">Real-Time Feedback</h4>
+            <p>Get instant feedback on your cybersecurity skills and improve over time.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Challenge Preview Section -->
+<section class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Explore Challenges</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Linux Commands</h5>
+                        <p class="card-text">Use and learn basic to advanced Linux commands</p>
+                        <a href="challenges.html" class="btn btn-primary">Try Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Networking and Permissions</h5>
+                        <p class="card-text">Learn how to use basic networking commands</p>
+                        <a href="challenges.html" class="btn btn-warning">Try Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Capture The Flag (CTF)</h5>
+                        <p class="card-text">Engage in challenges like CTF and more</p>
+                        <a href="challenges.html" class="btn btn-danger">Try Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="container my-5 text-center">
+    <h2 class="mb-4">How It Works</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <i class="fas fa-list-ol fa-3x text-info"></i>
+            <h4 class="mt-3">Step 1</h4>
+            <p>Choose a challenge from beginner to expert level.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-terminal fa-3x text-warning"></i>
+            <h4 class="mt-3">Step 2</h4>
+            <p>Engage in hands-on Linux command simulations.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-lightbulb fa-3x text-success"></i>
+            <h4 class="mt-3">Step 3</h4>
+            <p>Receive instant feedback and improve your skills.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+        <p class="mb-0">&copy; 2025 Vulnerability Simulation. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navbar-container").innerHTML = html;
+  
+        // 🔁 Manually run the login logic after navbar is loaded
+        const name = sessionStorage.getItem("firstName");
+        const welcomeSpan = document.getElementById("userWelcome");
+        const loggedInMenu = document.getElementById("loggedInMenu");
+        const guestMenu = document.getElementById("guestMenu");
+  
+        if (name) {
+          if (welcomeSpan) welcomeSpan.innerText = name;
+          if (loggedInMenu) loggedInMenu.style.display = "block";
+          if (guestMenu) guestMenu.style.display = "none";
+        } else {
+          if (welcomeSpan) welcomeSpan.innerText = "";
+          if (loggedInMenu) loggedInMenu.style.display = "none";
+          if (guestMenu) guestMenu.style.display = "block";
+        }
+      });
+  
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

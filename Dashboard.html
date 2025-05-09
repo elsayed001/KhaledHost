@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Vulnerability Simulator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+    }
+    .dashboard-container {
+      padding: 30px;
+    }
+    .card {
+      background-color: #1a1f2e;
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
+    }
+    .progress-bar {
+      background-color: #17a2b8 !important;
+    }
+    .btn-action {
+      margin: 10px 5px 0 0;
+    }
+    .assessment-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    .assessment-card {
+      background-color: #1a1f2e;
+      padding: 15px;
+      border-radius: 10px;
+      width: 32%;
+      box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
+    }
+    .assessment-card h6 {
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    .assessment-card p {
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .assessment-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <!-- Dashboard Content -->
+  <div class="container dashboard-container">
+    <h1 class="text-center my-4">Welcome! </h1>
+
+    <div class="row">
+      <!-- User Info -->
+      <div class="col-md-4">
+        <div class="card p-3 text-center">
+          <h5>User Profile</h5>
+          <p><strong>First Name:</strong> <span id="fname"></span></p>
+          <p><strong>Last Name:</strong> <span id="lname"></span></p>
+          <a href="terminal.html" class="btn btn-outline-light btn-sm btn-action">Go to Terminal</a>
+          <a href="challenges.html" class="btn btn-outline-info btn-sm btn-action">Go to Challenges</a>
+          <a href="assessment.html" class="btn btn-warning btn-sm btn-action">Take the Assessment</a>
+        </div>
+      </div>
+
+      <!-- Assessment Progress -->
+      <div class="col-md-8">
+        <div class="card p-3">
+          <h5>Assessment Progress</h5>
+          <div class="progress">
+            <div class="progress-bar" id="assessmentProgress" style="width: 0%;">0/8 Completed</div>
+          </div>
+          <p class="mt-2">Complete all The assessments to finish the course.</p>
+          <div class="row text-center mt-3">
+            <div class="col">
+              <div class="card p-2">
+                <h6 class="text-success">Correct Answers</h6>
+                <p id="correctAnswers">32</p>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card p-2">
+                <h6 class="text-danger">Incorrect Answers</h6>
+                <p id="wrongAnswers">8</p>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card p-2">
+                <h6 class="text-warning">Pending Assessments</h6>
+                <p id="pendingAssessments">3</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assessment Sets Grid -->
+    <div class="assessment-grid">
+      <div class="assessment-card">
+        <h6>Assessment 1: Basic Commands</h6>
+        <p>Status: Not Completed</p>
+        <a href="assessment.html" class="btn btn-sm btn-outline-warning">Start Assessment</a>
+      </div>
+      <div class="assessment-card">
+        <h6>Assessment 2: Permissions & Ownership</h6>
+        <p>Status: Not Completed</p>
+        <a href="assessment.html" class="btn btn-sm btn-outline-warning">Start Assessment</a>
+      </div>
+      <div class="assessment-card">
+        <h6>Assessment 3: Archiving & Compression</h6>
+        <p>Status: Not Completed</p>
+        <a href="assessment.html" class="btn btn-sm btn-outline-warning">Start Assessment</a>
+      </div>
+      <div class="assessment-card">
+        <h6>Assessment 4: Process & Monitoring</h6>
+        <p>Status: Not Completed</p>
+        <a href="assessment.html" class="btn btn-sm btn-outline-warning">Start Assessment</a>
+      </div>
+      <div class="assessment-card">
+        <h6>Assessment 5: Networking & System Info</h6>
+        <p>Status: Not Completed</p>
+        <a href="assessment.html" class="btn btn-sm btn-outline-warning">Start Assessment</a>
+      </div>
+      <div class="assessment-card">
+        <h6>Assessment 6: CTF Workflow & Secure Zip</h6>
+        <p>Status: Not Completed</p>
+        <a href="assessment.html" class="btn btn-sm btn-outline-warning">Start Assessment</a>
+      </div>
+      <div class="assessment-card">
+        <h6>Assessment 7: Advanced CTF + Forensics</h6>
+        <p>Status: Not Completed</p>
+        <a href="assessment.html" class="btn btn-sm btn-outline-warning">Start Assessment</a>
+      </div>
+    </div>
+      
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const fname = sessionStorage.getItem("firstName") || "N/A";
+      const lname = sessionStorage.getItem("lastName") || "N/A";
+      document.getElementById("fname").textContent = fname;
+      document.getElementById("lname").textContent = lname;
+    
+      const completedSets = JSON.parse(localStorage.getItem("completedSets")) || [];
+      const completedSetNumbers = completedSets.map(s => s.setnumber);
+    
+      const cards = document.querySelectorAll(".assessment-card");
+    
+      cards.forEach((card, index) => {
+        const setNumber = index + 1;
+        const completed = completedSets.find(s => s.setnumber === setNumber);
+    
+        const statusText = card.querySelector("p");
+        const actionButton = card.querySelector("a");
+    
+        if (completed) {
+          statusText.innerHTML = `Completed - Final Score: ${completed.finalScore}%`;
+          actionButton.classList.remove("btn-outline-warning");
+          actionButton.classList.add("btn-outline-primary");
+          actionButton.textContent = "Review Questions";
+          actionButton.href = `review.html?set=${setNumber}`;
+        } else {
+          statusText.innerHTML = `Status: Not Completed`;
+          actionButton.textContent = "Start Assessment";
+          actionButton.href = "assessment.html";
+        }
+      });
+    
+      // ✨ Calculate real correct/incorrect/pending counts
+      let totalCorrect = 0;
+      let totalIncorrect = 0;
+      let totalAnsweredQuestions = 0;
+    
+      completedSets.forEach(set => {
+        set.answers.forEach(ans => {
+          if (ans.yourAnswer === ans.correctAnswer) {
+            totalCorrect++;
+          } else {
+            totalIncorrect++;
+          }
+          totalAnsweredQuestions++;
+        });
+      });
+    
+      const totalAssessments = cards.length; // automatic based on .assessment-card
+      const progressPercent = (completedSetNumbers.length / totalAssessments) * 100;
+    
+      document.getElementById("assessmentProgress").style.width = progressPercent + "%";
+      document.getElementById("assessmentProgress").innerText = `${completedSetNumbers.length}/${totalAssessments} Completed`;
+    
+      document.getElementById("correctAnswers").innerText = totalCorrect;
+      document.getElementById("wrongAnswers").innerText = totalIncorrect;
+      document.getElementById("pendingAssessments").innerText = totalAssessments - completedSetNumbers.length;
+    
+      fetch("navbar.html")
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+          const name = sessionStorage.getItem("firstName");
+          const welcomeSpan = document.getElementById("userWelcome");
+          const loggedInMenu = document.getElementById("loggedInMenu");
+          const guestMenu = document.getElementById("guestMenu");
+    
+          if (name) {
+            if (welcomeSpan) welcomeSpan.innerText = name;
+            if (loggedInMenu) loggedInMenu.style.display = "block";
+            if (guestMenu) guestMenu.style.display = "none";
+          } else {
+            if (welcomeSpan) welcomeSpan.innerText = "";
+            if (loggedInMenu) loggedInMenu.style.display = "none";
+            if (guestMenu) guestMenu.style.display = "block";
+          }
+        });
+    });
+    
+    function logout() {
+      sessionStorage.clear();
+      
+      window.location.href = "login.html";
+    }
+    </script>
+    
+
+</body>
+</html>

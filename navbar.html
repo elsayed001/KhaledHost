@@ -1,0 +1,101 @@
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid position-relative">
+      <a class="navbar-brand" href="Home.html">Vulnerability Simulator</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+
+          <!-- Challenges -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="challengesDropdown" role="button" data-bs-toggle="dropdown">
+              Challenges & Simulations
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="challengesDropdown">
+              <li><a class="dropdown-item" href="challenges.html">Overview</a></li>
+              <li><a class="dropdown-item" href="terminal.html">Terminal Lab</a></li>
+            </ul>
+          </li>
+
+          <!-- Resources -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
+              Resources & Learning
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
+              <li><a class="dropdown-item" href="documentation.html">Documentation</a></li>
+              <li><a class="dropdown-item" href="guidelines.html">Guidelines</a></li>
+            </ul>
+          </li>
+
+          <!-- Contact -->
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact & Support</a>
+          </li>
+        </ul>
+
+        <!-- Profile Dropdown (Right side) -->
+        <div class="dropdown ms-auto pe-3">
+          <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+             href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+             style="font-size: 1.1rem;">
+            <i class="fas fa-user-circle fa-2x me-2"></i>
+            <span id="userWelcome" class="fs-6"></span>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end bg-dark text-white border-0 shadow"
+              aria-labelledby="userDropdown" style="min-width: 160px;">
+            <!-- If logged in -->
+            <div id="loggedInMenu" style="display: none;">
+              <li><a class="dropdown-item text-white small" href="Dashboard.html">Dashboard</a></li>
+              <li><hr class="dropdown-divider bg-secondary"></li>
+              <li><a class="dropdown-item text-white small" href="#" onclick="logout()">Logout</a></li>
+            </div>
+
+            <!-- If guest -->
+            <div id="guestMenu" style="display: none;">
+              <li><a class="dropdown-item text-white small" href="login.html">Login</a></li>
+              <li><a class="dropdown-item text-white small" href="register.html">Register</a></li>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+</nav>
+
+<script>
+window.onload = function () {
+    const name = sessionStorage.getItem("firstName");
+    const email = sessionStorage.getItem("email");
+    const welcomeSpan = document.getElementById("userWelcome");
+    const loggedInMenu = document.getElementById("loggedInMenu");
+    const guestMenu = document.getElementById("guestMenu");
+
+    if (name) {
+        if (welcomeSpan) welcomeSpan.innerText = name;
+        if (loggedInMenu) loggedInMenu.style.display = "block";
+        if (guestMenu) guestMenu.style.display = "none";
+
+        // ✅ Check if the user is the admin (email match, case-insensitive)
+        if (email && email.toLowerCase() === "alshaeri003@gannon.edu") {
+            const adminLink = document.createElement('li');
+            adminLink.innerHTML = '<a class="dropdown-item text-white small" href="admin.html">Admin Dashboard</a>';
+            loggedInMenu.insertBefore(adminLink, loggedInMenu.firstChild);
+
+            console.log("✅ Admin link added for:", email); // Debug log
+        }
+    } else {
+        if (welcomeSpan) welcomeSpan.innerText = "";
+        if (loggedInMenu) loggedInMenu.style.display = "none";
+        if (guestMenu) guestMenu.style.display = "block";
+    }
+};
+
+function logout() {
+    sessionStorage.clear();
+    window.location.href = "login.html";
+}
+</script>

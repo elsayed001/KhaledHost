@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment - Vulnerability Simulator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: #1a1a1a;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .card {
+      background-color: #1e1e1e;
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+    .form-check-label {
+      color: white;
+    }
+    .form-select {
+      background-color: #1e1e1e;
+      color: white;
+      border: 1px solid #333;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .text-danger {
+      color: #ff4d4d !important;
+    }
+  </style>
+</head>
+<body>
+<div id="navbar-container"></div>
+<header class="hero">
+  <h1>Cybersecurity Assessments</h1>
+  <p>Evaluate your skills with interactive cybersecurity questions.</p>
+</header>
+
+<div class="container mt-5">
+  <div class="mb-4">
+    <label for="setSelector" class="form-label">Select Assessment Set:</label>
+    <select id="setSelector" class="form-select" onchange="fetchAssessment()">
+      <option value="">-- Select Set --</option>
+      <option value="1">Intro to Linux</option>
+      <option value="2">Compression & Decompression</option>
+      <option value="3">File Permissions</option>
+      <option value="4">Process Management</option>
+      <option value="4">Networking</option>
+      <option value="4">Wget: Encrypt</option>
+      <option value="4">Wget: CTF</option>
+    </select>
+  </div>
+
+  <div id="assessment-content" class="assessment-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  fetch("navbar.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("navbar-container").innerHTML = html;
+      const name = sessionStorage.getItem("firstName");
+      const welcomeSpan = document.getElementById("userWelcome");
+      const loggedInMenu = document.getElementById("loggedInMenu");
+      const guestMenu = document.getElementById("guestMenu");
+      if (name) {
+        if (welcomeSpan) welcomeSpan.innerText = name;
+        if (loggedInMenu) loggedInMenu.style.display = "block";
+        if (guestMenu) guestMenu.style.display = "none";
+      } else {
+        if (welcomeSpan) welcomeSpan.innerText = "";
+        if (loggedInMenu) loggedInMenu.style.display = "none";
+        if (guestMenu) guestMenu.style.display = "block";
+      }
+    });
+
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = "login.html";
+  }
+
+  let questions = [];
+  let selectedSet = 0;
+
+  function fetchAssessment() {
+    const setSelector = document.getElementById('setSelector');
+    selectedSet = parseInt(setSelector.value);
+
+    if (!selectedSet) {
+      document.getElementById("assessment-content").innerHTML = '';
+      return;
+    }
+
+    fetch(`http://localhost:5000/Assessment/${selectedSet}`)
+      .then(res => res.json())
+      .then(data => {
+        questions = data;
+        renderAllQuestions();
+      })
+      .catch(error => {
+        console.error('Failed to fetch questions:', error);
+        document.getElementById("assessment-content").innerHTML = '<p class="text-danger">Failed to load questions. Try again later.</p>';
+      });
+  }
+
+  function renderAllQuestions() {
+    if (!questions.length) return;
+
+    let html = `<form id="assessmentForm">`;
+
+    questions.forEach((q, idx) => {
+      const options = q.possibleAnswers.split(',').map(opt => opt.trim());
+      html += `
+        <div class="card p-4 mb-4">
+          <h4>Q${idx + 1}: ${q.question}</h4>
+          ${options.map((opt, optIdx) => `
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="question-${q.assessmentId}" id="q${idx}-opt${optIdx}" value="${opt}">
+              <label class="form-check-label" for="q${idx}-opt${optIdx}">${opt}</label>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    });
+
+    html += `
+      <div class="text-end">
+        <button type="button" class="btn btn-primary" onclick="submitAllAnswers()">Submit Assessment</button>
+      </div>
+    </form>`;
+
+    document.getElementById("assessment-content").innerHTML = html;
+  }
+
+  function submitAllAnswers() {
+  const email = sessionStorage.getItem("email");
+  if (!email) {
+    alert("User not logged in!");
+
+    window.location.href = "login.html";
+
+    return;
+  }
+
+  const userAnswers = [];
+  let unansweredQuestions = [];
+
+  questions.forEach((q, idx) => {
+    const selected = document.querySelector(`input[name="question-${q.assessmentId}"]:checked`);
+    if (!selected) {
+      unansweredQuestions.push(idx + 1); // Store question number (1-indexed)
+    }
+    userAnswers.push({
+      assessmentId: q.assessmentId,
+      answer: selected ? selected.value : "Not Answered"
+    });
+  });
+
+  if (unansweredQuestions.length > 0) {
+    alert(`Please answer the following question(s) before submitting: ${unansweredQuestions.join(", ")}`);
+    return;
+  }
+
+  const payload = {
+    email: email,
+    setnumber: selectedSet,
+    answers: userAnswers
+  };
+
+  fetch('http://localhost:5000/Assessment/submit-all', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Failed to submit answers.');
+    return res.json();
+  })
+  .then(data => {
+    console.log(data);
+
+    const combinedAnswers = questions.map(q => {
+      const userA = userAnswers.find(a => a.assessmentId === q.assessmentId);
+      return {
+        assessmentId: q.assessmentId,
+        question: q.question,
+        correctAnswer: q.correctAnswer,
+        yourAnswer: userA ? userA.answer : "Not Answered"
+      };
+    });
+
+    let completedSets = JSON.parse(localStorage.getItem('completedSets')) || [];
+    completedSets = completedSets.filter(s => s.setnumber !== selectedSet);
+    completedSets.push({
+      setnumber: data.scoreDetails.setnumber,
+      finalScore: data.scoreDetails.finalScore,
+      totalQuestions: data.scoreDetails.totalQuestions,
+      answers: combinedAnswers
+    });
+
+    localStorage.setItem('completedSets', JSON.stringify(completedSets));
+
+    window.location.href = "Dashboard.html";
+  })
+  .catch(error => {
+    console.error(error);
+    document.getElementById("assessment-content").innerHTML = '<p class="text-danger text-center">Error submitting your assessment. Try again later.</p>';
+  });
+}
+
+</script>
+
+
+</body>
+</html>

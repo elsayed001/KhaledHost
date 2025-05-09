@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Create Challenges</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    .card {
+      background-color: #d1cfcf;
+      color: rgb(0, 0, 0);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .btn-submit {
+      display: block;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Admin - Create 10 Challenges</h1>
+  <div class="text-end mb-4">
+    <a href="admin-update.html" class="btn btn-outline-info me-2">Go to Update Questions</a>
+    <a href="admin.html" class="btn btn-outline-success">Go to Create Questions</a>
+    <a href="admin-challenge.html" class="btn btn-outline-success">Go to Create Challenges</a>
+    <a href="admin-update-challenge.html" class="btn btn-outline-success">Go to Update Challenges</a>
+  </div>
+  
+
+  <!-- Category Selector -->
+  <div class="mb-3">
+    <label for="category" class="form-label">Category:</label>
+    <input type="text" id="category" class="form-control" placeholder="Challenge Set Name">
+  </div>
+
+  <!-- Difficulty Selector -->
+  <div class="mb-3">
+    <label for="difficulty" class="form-label">Difficulty:</label>
+    <select id="difficulty" class="form-select">
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+
+  <!-- Challenge Cards -->
+  <div id="challengesContainer"></div>
+
+  <button id="submitChallenges" class="btn btn-primary btn-submit">Submit All Challenges</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // 🚨 Access control check at the VERY TOP of the script
+  const allowedEmail = "alshaeri003@gannon.edu";
+  const userEmail = sessionStorage.getItem('email');  // adjust this if you use a different session key
+  
+  if (userEmail !== allowedEmail) {
+      alert("Unauthorized access. Redirecting...");
+      window.location.href = "home.html";  // redirect to home
+  }
+  
+  // 👇 your existing code starts here
+  fetch("navbar.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("navbar-container").innerHTML = html;
+  
+      const name = sessionStorage.getItem("firstName");
+      const welcomeSpan = document.getElementById("userWelcome");
+      const loggedInMenu = document.getElementById("loggedInMenu");
+      const guestMenu = document.getElementById("guestMenu");
+  
+      if (name) {
+        if (welcomeSpan) welcomeSpan.innerText = name;
+        if (loggedInMenu) loggedInMenu.style.display = "block";
+        if (guestMenu) guestMenu.style.display = "none";
+      } else {
+        if (welcomeSpan) welcomeSpan.innerText = "";
+        if (loggedInMenu) loggedInMenu.style.display = "none";
+        if (guestMenu) guestMenu.style.display = "block";
+      }
+    });
+    </script>
+<script>
+  const challengesContainer = document.getElementById('challengesContainer');
+
+  // Create 10 challenge cards
+  for (let i = 0; i < 10; i++) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <h5>Challenge ${i + 1}</h5>
+      <div class="mb-3">
+        <label class="form-label">Challenge Name</label>
+        <input type="text" id="challengeName-${i}" class="form-control" placeholder="Enter challenge title">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Hint 1</label>
+        <input type="text" id="hint1-${i}" class="form-control" placeholder="Enter first hint">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Hint 2</label>
+        <input type="text" id="hint2-${i}" class="form-control" placeholder="Enter second hint">
+      </div>
+    `;
+    challengesContainer.appendChild(card);
+  }
+
+  document.getElementById('submitChallenges').addEventListener('click', () => {
+    const category = document.getElementById('category').value.trim();
+    const difficulty = document.getElementById('difficulty').value;
+
+    if (!category) {
+      alert('Please enter a category.');
+      return;
+    }
+
+    for (let i = 0; i < 10; i++) {
+      const name = document.getElementById(`challengeName-${i}`).value.trim();
+      const hint1 = document.getElementById(`hint1-${i}`).value.trim();
+      const hint2 = document.getElementById(`hint2-${i}`).value.trim();
+
+      if (!name) {
+        console.log(`Challenge ${i + 1} is empty, skipping.`);
+        continue;  // Skip empty challenges
+      }
+
+      const challengeData = {
+        name: name,
+        description: "",  // You said don't worry about description for now
+        difficulty: difficulty,
+        category: category,
+        hints: `${hint1} | ${hint2}`  // Combine both hints in one string, or change as needed
+      };
+
+      // POST each challenge to /challenges/register
+      fetch('http://localhost:5000/challenges/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(challengeData)
+      })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Failed to create challenge ${i + 1}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log(`Challenge ${i + 1} created successfully`, data);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    }
+
+    alert('All challenges submitted (check console for details).');
+  });
+</script>
+
+</body>
+</html>

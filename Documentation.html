@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Vulnerability Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .doc-container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
+            margin-bottom: 30px;
+        }
+        .doc-header {
+            background: linear-gradient(45deg, #007bff, #17a2b8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .accordion-button {
+            background-color: #1e1e1e;
+            color: white;
+            border: none;
+            font-size: 18px;
+        }
+        .accordion-button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .resource-links a {
+            color: #17a2b8;
+            font-size: 16px;
+        }
+        .resource-links a:hover {
+            text-decoration: underline;
+            color: #00c3ff;
+        }
+        .video-container {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<body>
+    <div id="navbar-container"></div>
+</body>
+
+
+<!-- Main Content -->
+<div class="container">
+    <h1 class="text-center my-4">Cybersecurity Documentation & Learning Resources</h1>
+
+    <!-- Documentation & Learning Sections -->
+    <div class="accordion" id="documentationAccordion">
+        <!-- Books Section -->
+        <div class="accordion-item doc-container">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#booksSection" aria-expanded="true">
+                    📚 Recommended Books
+                </button>
+            </h2>
+            <div id="booksSection" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <ul class="resource-links">
+                        <li><a href="https://nostarch.com/hacking" target="_blank">The Art of Exploitation by Jon Erickson</a></li>
+                        <li><a href="https://nostarch.com/metasploit" target="_blank">Metasploit: The Penetration Tester’s Guide</a></li>
+                        <li><a href="https://nostarch.com/websec" target="_blank">Web Security for Developers</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Videos Section -->
+        <div class="accordion-item doc-container">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#videosSection">
+                    🎥 Video Tutorials & Webinars
+                </button>
+            </h2>
+            <div id="videosSection" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/3Kq1MIfTWCE" title="Cybersecurity Basics"></iframe>
+                    </div>
+                    <p>Explore more cybersecurity courses on <a href="https://www.cybrary.it/" target="_blank">Cybrary</a> and <a href="https://www.sans.org/" target="_blank">SANS</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Articles Section -->
+        <div class="accordion-item doc-container">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#articlesSection">
+                    📝 Articles & Guides
+                </button>
+            </h2>
+            <div id="articlesSection" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <ul class="resource-links">
+                        <li><a href="https://www.cisa.gov/cybersecurity" target="_blank">CISA Cybersecurity Guidance</a></li>
+                        <li><a href="https://owasp.org/" target="_blank">OWASP Web Security Resources</a></li>
+                        <li><a href="https://www.kali.org/" target="_blank">Kali Linux - Penetration Testing Platform</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navbar-container").innerHTML = html;
+  
+        // 🔁 Manually run the login logic after navbar is loaded
+        const name = sessionStorage.getItem("firstName");
+        const welcomeSpan = document.getElementById("userWelcome");
+        const loggedInMenu = document.getElementById("loggedInMenu");
+        const guestMenu = document.getElementById("guestMenu");
+  
+        if (name) {
+          if (welcomeSpan) welcomeSpan.innerText = name;
+          if (loggedInMenu) loggedInMenu.style.display = "block";
+          if (guestMenu) guestMenu.style.display = "none";
+        } else {
+          if (welcomeSpan) welcomeSpan.innerText = "";
+          if (loggedInMenu) loggedInMenu.style.display = "none";
+          if (guestMenu) guestMenu.style.display = "block";
+        }
+      });
+  
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

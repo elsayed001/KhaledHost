@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Vulnerability Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .leaderboard-container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
+            margin-bottom: 30px;
+        }
+        .top-user {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+        .chart-container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<body>
+    <div id="navbar-container"></div>
+</body>
+
+
+<!-- Main Content -->
+<div class="container">
+    <h1 class="text-center my-4">Leaderboard</h1>
+
+    <!-- Top User Highlight -->
+    <div class="top-user">
+        🏆 Top Player: <span id="topPlayer">Dema</span> - <span id="topPoints">1500 Points</span>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="leaderboard-container">
+        <h3 class="text-center">Top Performers</h3>
+        <div class="table-responsive">
+            <table class="table table-dark table-striped text-center">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Points</th>
+                        <th>Completed Challenges</th>
+                        <th>Success Rate</th>
+                        <th>Badges</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🥇 1</td>
+                        <td>Dema</td>
+                        <td>1500</td>
+                        <td>20</td>
+                        <td>100%</td>
+                        <td>🏅 🏆</td>
+                    </tr>
+                    <tr>
+                        <td>🥈 2</td>
+                        <td>Sara</td>
+                        <td>1200</td>
+                        <td>18</td>
+                        <td>90%</td>
+                        <td>🏅</td>
+                    </tr>
+                    <tr>
+                        <td>🥉 3</td>
+                        <td>Sultan</td>
+                        <td>900</td>
+                        <td>15</td>
+                        <td>75%</td>
+                        <td>🎖️</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Khalid</td>
+                        <td>800</td>
+                        <td>12</td>
+                        <td>60%</td>
+                        <td>🏅</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Performance Chart -->
+    <div class="chart-container">
+        <h3 class="text-center">Performance Chart</h3>
+        <canvas id="leaderboardChart"></canvas>
+    </div>
+</div>
+
+<script>
+    // Chart.js Bar Chart for Performance
+    var ctx = document.getElementById('leaderboardChart').getContext('2d');
+    var leaderboardChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Dema', 'Sara', 'Sultan', 'Khalid'],
+            datasets: [{
+                label: 'Total Points',
+                data: [1500, 1200, 900, 800],
+                backgroundColor: ['#FFD700', '#C0C0C0', '#CD7F32', '#4bc0c0'],
+                borderColor: ['#FFD700', '#C0C0C0', '#CD7F32', '#4bc0c0'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

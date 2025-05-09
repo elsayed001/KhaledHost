@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenges - Vulnerability Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .challenge-terminal-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 30px;
+            gap: 30px;
+        }
+        .challenge-container {
+            width: 15%;
+        }
+        .challenge-steps {
+            width: 40%;
+            height: 600px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .challenge-step {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #2a2a2a;
+        }
+        .terminal-container {
+            background: #000;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
+            width: 45%;
+            height: 600px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #0f0;
+        }
+        .terminal-header {
+            background: #0a0a0a;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            color: #0f0;
+            border-bottom: 2px solid #0f0;
+        }
+        .terminal-body {
+            flex-grow: 1;
+            background: #000;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="Home.html">Vulnerability Simulator</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="challengesDropdown" role="button" data-bs-toggle="dropdown">
+                        Challenges & Simulations
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="challengesDropdown">
+                        <li><a class="dropdown-item" href="challenges.html">Overview</a></li>
+                        <li><a class="dropdown-item" href="terminal.html">Terminal Lab</a></li>
+                  
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
+                        Resources & Learning
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
+                        <li><a class="dropdown-item" href="documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="guidelines.html">Guidelines</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact & Support</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<header class="hero text-center p-4 bg-dark text-white">
+    <h1>Cybersecurity Challenges</h1>
+    <p>Test your skills with real-world vulnerability simulations.</p>
+</header>
+<div class="challenge-terminal-wrapper">
+    <div class="challenge-container">
+        <h4>Select a Challenge Level</h4>
+        <div class="dropdown mb-2">
+            <button class="btn btn-success dropdown-toggle w-100" data-bs-toggle="dropdown">Beginner Challenges</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" onclick="showChallengeSet(1)">Intro to Linux</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showChallengeSet(2)">Compression & Decompression</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showChallengeSet(3)">File Permissions & User Management</a></li>
+            </ul>
+        </div>
+        <div class="dropdown mb-2">
+            <button class="btn btn-warning dropdown-toggle w-100" data-bs-toggle="dropdown">Intermediate Challenges</button>
+            <ul class="dropdown-menu">
+                
+                <li><a class="dropdown-item" href="#" onclick="showChallengeSet(4)">Process Management & Monitoring</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showChallengeSet(5)">Networking & Services</a></li>
+            </ul>
+        </div>
+        <div class="dropdown mb-2">
+            <button class="btn btn-danger dropdown-toggle w-100" data-bs-toggle="dropdown">Advanced Challenges</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" onclick="showChallengeSet(6)">Wget Challenge: Encrypt</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showChallengeSet(7)">Wget Challenge: CTF</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="challengeSteps" class="challenge-steps">
+        <div id="challengeStepContainer"></div>
+    </div>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <span><i class="fas fa-terminal"></i> Linux Terminal</span>
+            <span>⚡ Secure Shell Environment</span>
+        </div>
+        <div class="terminal-body">
+            <iframe
+            src="https://bellard.org/jslinux/vm.html?cpu=riscv64&url=fedora33-riscv.cfg&mem=256"
+              scrolling="no">
+          </iframe>
+        </div>
+    </div>
+</div>
+<script>
+function showChallengeSet(setNumber) {
+    const challenges = {
+        1: ["Create an empty file named report.txt", "List all files and directories in the current directory, including hidden ones.", "Create a directory named project", "Move report.txt into the project directory.", "Copy report.txt from the project directory to the current directory.", "Remove the report.txt file from the current directory.", "Display the current working directory.", "View the contents of a file named notes.txt.", "Display the first 5 lines of notes.txt", "Search for the word error inside log.txt"],
+        2: ["Compress the project directory into a project.zip file", "Extract the contents of project.zip", "Create backup.tar.gz from the project directory", "Extract backup.tar.gz", "Compress data.txt with gzip", "Decompress data.txt.gz", "Compress with bzip2", "Decompress data.txt.bz2", "View contents of archive.tar.gz", "Create .xz file from report.txt"],
+        3: ["List all running processes", "Find a process by name", "Kill a process using PID", "Force kill an unresponsive process", "Monitor system resources in real-time", "Sort processes by memory usage", "Monitor system logs in real-time", "Find top 5 CPU-intensive processes", "Check disk space", "Check memory usage"],
+        4: ["Check system’s IP address", "Display open ports and services", "Ping a remote server", "Use dig/nslookup for DNS", "Use curl to fetch webpage", "Use traceroute to trace route", "Check network connections", "View hostname and DNS config", "View routing table", "Identify default gateway"],
+        5: ["Download zip using wget", "Unzip the file", "Navigate into folder", "List contents", "Find password in files", "Unzip protected file using password", "Explore extracted files", "Read flag file", "Verify flag format", "Clean up files"],
+        6: ["Download zip using wget", "Unzip the file", "Decode base64 message", "Analyze corrupted log", "Locate hidden directory", "Read real flag", "Search password list", "Inspect shell script", "Compare real and fake flags", "Clean up all files"]
+    };
+    const stepsDiv = document.getElementById('challengeStepContainer');
+    stepsDiv.innerHTML = '';
+    if (challenges[setNumber]) {
+        challenges[setNumber].forEach((desc, i) => {
+            const step = `<div class='challenge-step'><strong>Challenge ${i+1}:</strong> ${desc}<br><button class='btn btn-sm btn-primary mt-2'>Show Hint</button></div>`;
+            stepsDiv.innerHTML += step;
+        });
+        document.getElementById('challengeSteps').style.display = 'flex';
+    }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let challengeSets = {
+        
+        1: [
+            { title: "Challenge 1: Create an empty file named report.txt", hint1: "Hint 1: Use a command to create a file without adding content.", hint2: "Hint 2: Think of a basic command used when starting a new file in Linux." },
+            { title: "Challenge 2: List all files and directories in the current directory, including hidden ones.", hint1: "Hint 1: Use a listing command with an extra flag.", hint2: "Hint 2: Hidden files typically start with a dot (.) — make sure your command reveals them." },
+            { title: "Challenge 3: Create a directory named project", hint1: "Hint 1: Use the standard directory creation command.", hint2: "Hint 2: You're introducing a new folder into your current working path." },
+            { title: "Challenge 4: Move report.txt into the project directory.", hint1: "Hint 1: You’ll need a file-moving command.", hint2: "Hint 2: This command needs a source and a destination path." },
+            { title: "Challenge 5: Copy report.txt from the project directory to the current directory.", hint1: "Hint 1: Use a command that duplicates files.", hint2: "Hint 2: It should not alter the original file." },
+            { title: "Challenge 6: Remove the report.txt file from the current directory.", hint1: "Hint 1: Use the Linux command to delete files.", hint2: "Hint 2: Deleting files in Linux is permanent, so double-check filenames." },
+            { title: "Challenge 7: Display the current working directory.", hint1: "Hint 1: Use the command that prints your location in the filesystem.", hint2: "Hint 2: You usually run this when you're unsure where you are in the terminal." },
+            { title: "Challenge 8: View the contents of a file named notes.txt.", hint1: "Hint 1: Use a file viewing command that prints output to the screen.", hint2: "Hint 2: This command can read short text files easily." },
+            { title: "Challenge 9: Display the first 5 lines of notes.txt", hint1: "Hint 1: There’s a command to view the beginning of files.", hint2: "Hint 2: You can pass a flag to control how many lines are shown." },
+            { title: "Challenge 10: Search for the word error inside log.txt", hint1: "Hint 1: Use a command to search for patterns within files.", hint2: "Hint 2: Combine the command with a string and filename to narrow results." }
+        ],
+        2: [
+            { title: "Challenge 0.1: Upload a file into the terminal and read the instructions using commands.", hint1: "Hint 1: Use the upload tool in the interface.", hint2: "Hint 2: After uploading, explore file listings and text viewers to explore contents." },
+            { title: "Challenge 1: Compress the project directory into a project.zip file.", hint1: "Hint 1: Use a common compression utility.", hint2: "Hint 2: Make sure you include all files and subfolders recursively." },
+            { title: "Challenge 2: Extract the contents of project.zip into a directory.", hint1: "Hint 1: Use the standard unzip utility.", hint2: "Hint 2: Check if you need to create the destination directory first or not." },
+            { title: "Challenge 3: Create a compressed tarball named backup.tar.gz from the project directory.", hint1: "Hint 1: Combine archiving and compression in one step.", hint2: "Hint 2: You’ll need to include a few flags for both creating and compressing." },
+            { title: "Challenge 4: Extract the backup.tar.gz file into the current directory.", hint1: "Hint 1: Use the same tool as before but for extraction.", hint2: "Hint 2: You’ll reverse the flags from compression to decompression." },
+            { title: "Challenge 5: Compress a file named data.txt using gzip.", hint1: "Hint 1: Use gzip on an individual file.", hint2: "Hint 2: The original file will be replaced with a .gz version." },
+            { title: "Challenge 6: Decompress the data.txt.gz file.", hint1: "Hint 1: Use a tool to reverse gzip compression.", hint2: "Hint 2: The result should restore the original file without .gz extension." },
+            { title: "Challenge 7: Compress data.txt using bzip2.", hint1: "Hint 1: Use a different compression method than gzip.", hint2: "Hint 2: This will give you a .bz2 output file." },
+            { title: "Challenge 8: Decompress data.txt.bz2.", hint1: "Hint 1: There is a specific command that works for .bz2 files.", hint2: "Hint 2: You don't need to specify options, just the filename." },
+            { title: "Challenge 9: View the contents of a compressed archive.tar.gz without extracting it.", hint1: "Hint 1: There’s a way to list files in a tarball.", hint2: "Hint 2: The command won’t alter the archive but gives a preview of what's inside." },
+            { title: "Challenge 10: Create a .xz compressed file from report.txt.", hint1: "Hint 1: Try using the xz tool.", hint2: "Hint 2: This tool works similarly to gzip, but offers better compression ratios." }
+        ],
+        3: [
+            { title: "Challenge 1: Change file permissions with chmod", hint1: "Hint 1: Use chmod to update permissions.", hint2: "Hint 2: Think of which permission digits correspond to read/write/execute." },
+            { title: "Challenge 2: Modify file ownership with chown", hint1: "Hint 1: Use chown to change the user of a file.", hint2: "Hint 2: You’ll typically need sudo to run this." },
+            { title: "Challenge 3: Change a file's group ownership", hint1: "Hint 1: Use chgrp to change group access.", hint2: "Hint 2: Groups help manage file access for multiple users." },
+            { title: "Challenge 4: List file permissions using ls", hint1: "Hint 1: Use ls with a flag to see permission bits.", hint2: "Hint 2: The first column reveals permissions like rwx." },
+            { title: "Challenge 5: Grant a user execute permissions on a script", hint1: "Hint 1: Use chmod to give execute rights.", hint2: "Hint 2: Think of the +x flag here." },
+            { title: "Challenge 6: Revoke all permissions from a file for a specific user", hint1: "Hint 1: Use ACL tools like setfacl.", hint2: "Hint 2: This is more granular than chmod and useful for single users." },
+            { title: "Challenge 7: Create a new user in Linux", hint1: "Hint 1: Use a command to add a new system user.", hint2: "Hint 2: You'll likely need elevated permissions (sudo)." },
+            { title: "Challenge 8: Set a password for a new user", hint1: "Hint 1: Use the passwd command after user creation.", hint2: "Hint 2: You will be prompted to enter and confirm the password." },
+            { title: "Challenge 9: Add a user to a group", hint1: "Hint 1: Use usermod to modify user group membership.", hint2: "Hint 2: The -aG flag is useful for adding groups without overwriting." },
+            { title: "Challenge 10: Delete a user from the system", hint1: "Hint 1: Use userdel to remove the user.", hint2: "Hint 2: Consider using -r if you want to delete their home directory too." }
+        ],
+        4: [
+            { title: "Challenge 1: List all running processes on the system", hint1: "Hint 1: Use a command that lists active processes.", hint2: "Hint 2: Use extra flags to view all users and detailed info." },
+            { title: "Challenge 2: Find a process by name", hint1: "Hint 1: Combine ps with a filtering tool.", hint2: "Hint 2: Use a pipe to narrow down the list." },
+            { title: "Challenge 3: Kill a process using its PID", hint1: "Hint 1: Identify the PID and use kill.", hint2: "Hint 2: This sends a default termination signal." },
+            { title: "Challenge 4: Force kill an unresponsive process", hint1: "Hint 1: Use a stronger kill signal.", hint2: "Hint 2: This method doesn’t let the process clean up resources." },
+            { title: "Challenge 5: Monitor real-time system resource usage", hint1: "Hint 1: Use a tool that shows live CPU and memory stats.", hint2: "Hint 2: This is a common tool used to troubleshoot high usage." },
+            { title: "Challenge 6: Sort processes by memory usage", hint1: "Hint 1: Look inside your system monitor tool.", hint2: "Hint 2: Use keyboard shortcuts to change the sorting field." },
+            { title: "Challenge 7: Monitor system logs in real-time", hint1: "Hint 1: There’s a command to watch log files live.", hint2: "Hint 2: You can use this on /var/log/syslog or /var/log/auth.log." },
+            { title: "Challenge 8: Find the 5 most CPU-intensive processes", hint1: "Hint 1: Sort your process list by CPU.", hint2: "Hint 2: Combine sort and head utilities to isolate top entries." },
+            { title: "Challenge 9: Check the disk space usage on the system", hint1: "Hint 1: Use a command to check storage.", hint2: "Hint 2: A human-readable flag makes it easier to interpret results." },
+            { title: "Challenge 10: Check memory usage statistics", hint1: "Hint 1: Use a built-in memory report tool.", hint2: "Hint 2: Try viewing values in megabytes or gigabytes with a flag." }
+        ],
+        5: [
+            { title: "Challenge 1: Check the system’s IP address", hint1: "Hint 1: Use a command that shows network interfaces.", hint2: "Hint 2: You can find it under interfaces like eth0 or wlan0." },
+            { title: "Challenge 2: Display open ports and listening services", hint1: "Hint 1: Use a socket inspection command.", hint2: "Hint 2: Use flags to filter by listening TCP and UDP services." },
+            { title: "Challenge 3: Test network connectivity to a remote server", hint1: "Hint 1: Send ICMP requests to a public server.", hint2: "Hint 2: This helps determine if the server is reachable." },
+            { title: "Challenge 4: Check DNS resolution using dig or nslookup", hint1: "Hint 1: Use a command-line DNS lookup tool.", hint2: "Hint 2: These tools can reveal nameservers and TTLs." },
+            { title: "Challenge 5: Use curl to fetch a web page", hint1: "Hint 1: Use a tool that transfers data from or to a server.", hint2: "Hint 2: It's often used to interact with HTTP APIs." },
+            { title: "Challenge 6: Use traceroute to trace the path to a remote server", hint1: "Hint 1: This tool maps the route packets take.", hint2: "Hint 2: It shows each hop between your system and the destination." },
+            { title: "Challenge 7: Check active network connections with ss or netstat", hint1: "Hint 1: Use tools that show current TCP and UDP connections.", hint2: "Hint 2: Combine with flags to see connection states." },
+            { title: "Challenge 8: View your system’s hostname and DNS configuration", hint1: "Hint 1: Use commands to check hostname and resolver settings.", hint2: "Hint 2: /etc/resolv.conf stores DNS server entries." },
+            { title: "Challenge 9: Display the system’s routing table", hint1: "Hint 1: Use commands to show network routes.", hint2: "Hint 2: You’ll see default gateways and interface mappings." },
+            { title: "Challenge 10: Identify the default gateway of the system", hint1: "Hint 1: Look for the default route entry.", hint2: "Hint 2: It's usually listed at the top of the routing table." }
+        ],
+        6: [
+            { title: "Challenge 1: Download the challenge zip file using wget", hint1: "Hint 1: wget is used to download files via HTTP, HTTPS, or FTP.", hint2: "Hint 2: Learn more about it at https://www.gnu.org/software/wget/ — you’ll just need a URL." },
+            { title: "Challenge 2: Unzip the downloaded file", hint1: "Hint 1: Use a utility to extract .zip archives.", hint2: "Hint 2: Make sure you're targeting the correct file." },
+            { title: "Challenge 3: Navigate into the extracted folder", hint1: "Hint 1: Use a navigation command.", hint2: "Hint 2: The folder name should match what was in the zip." },
+            { title: "Challenge 4: List the contents of the folder", hint1: "Hint 1: Use ls to see what’s inside.", hint2: "Hint 2: Try -la to view everything including hidden files." },
+            { title: "Challenge 5: Find the file that contains the password", hint1: "Hint 1: Use grep to search recursively.", hint2: "Hint 2: Look for patterns like FLAG{...} in text files." },
+            { title: "Challenge 6: Use the password to unzip the protected zip file", hint1: "Hint 1: Use unzip with the -P option to enter a password.", hint2: "Hint 2: You'll need the exact password string." },
+            { title: "Challenge 7: Explore the extracted protected zip", hint1: "Hint 1: Use ls and cd to inspect contents.", hint2: "Hint 2: Check if any folders were extracted." },
+            { title: "Challenge 8: Read the flag file", hint1: "Hint 1: Use a command to display file contents.", hint2: "Hint 2: You’ll see the flag format in the output." },
+            { title: "Challenge 9: Verify the flag format", hint1: "Hint 1: Use grep to search inside the flag file.", hint2: "Hint 2: It should match a known pattern." },
+            { title: "Challenge 10: Clean up all files from the challenge", hint1: "Hint 1: Use the remove command recursively.", hint2: "Hint 2: Make sure you don’t delete unintended files." }
+        ],
+        7: [
+            { title: "Challenge 1: Download the challenge zip file using wget", hint1: "Hint 1: wget helps retrieve content from the web in Linux.", hint2: "Hint 2: Learn more at https://www.gnu.org/software/wget/ and make sure the URL ends with the file you want." },
+            { title: "Challenge 2: Unzip the downloaded file", hint1: "Hint 1: Use a standard utility to unpack zip files.", hint2: "Hint 2: Ensure you're in the directory where the file was downloaded." },
+            { title: "Challenge 3: Decode the base64-encoded message", hint1: "Hint 1: Use decoding tools available on the terminal.", hint2: "Hint 2: You might need to use piping to pass data into the decoder." },
+            { title: "Challenge 4: Analyze the corrupted log file", hint1: "Hint 1: Try exploring tools that reveal raw or unreadable content.", hint2: "Hint 2: Reading binary or corrupted logs might require specialized commands." },
+            { title: "Challenge 5: Locate the hidden directory", hint1: "Hint 1: Use commands that reveal all files, including hidden ones.", hint2: "Hint 2: Hidden directories begin with a dot — make sure you include a flag that lists them." },
+            { title: "Challenge 6: Read the real flag in the hidden folder", hint1: "Hint 1: Once inside the folder, use a command to display text content.", hint2: "Hint 2: Ensure the filename is spelled correctly." },
+            { title: "Challenge 7: Search the password list for fake flags", hint1: "Hint 1: Use a pattern search tool to look through files.", hint2: "Hint 2: Look for known flag formats while ignoring irrelevant content." },
+            { title: "Challenge 8: Inspect the shell script for clues", hint1: "Hint 1: View the contents of the shell script using a pager or viewer.", hint2: "Hint 2: Comments (lines beginning with #) may contain valuable hints." },
+            { title: "Challenge 9: Compare the real and fake flag files", hint1: "Hint 1: Use text readers to examine both files.", hint2: "Hint 2: Try to spot key differences in structure or content." },
+            { title: "Challenge 10: Clean up all files from the challenge", hint1: "Hint 1: Use file removal commands to delete multiple items.", hint2: "Hint 2: Be cautious with recursive removal commands in Linux." }
+        ],
+            8: []
+    };
+
+    function showChallengeSet(setNumber) {
+        const stepsDiv = document.getElementById('challengeStepContainer');
+        stepsDiv.innerHTML = '';
+        const set = challengeSets[setNumber];
+        if (set && set.length) {
+            set.forEach((challenge, i) => {
+                const step = document.createElement('div');
+                step.className = 'challenge-step';
+                step.innerHTML = `
+                    <strong>${challenge.title}</strong><br>
+                    <button class='btn btn-sm btn-primary mt-2' onclick="toggleHint(this, '${challenge.hint1}', '${challenge.hint2}')">Show Hint</button>
+                    <div class='mt-2' style="display:none;" class="hint-box"></div>
+                `;
+                stepsDiv.appendChild(step);
+            });
+            document.getElementById('challengeSteps').style.display = 'flex';
+        }
+    }
+
+    function toggleHint(button, hint1, hint2) {
+        const hintDiv = button.nextElementSibling;
+        if (hintDiv.style.display === 'none') {
+            hintDiv.style.display = 'block';
+            hintDiv.innerHTML = `<em>${hint1}</em><br><em>${hint2}</em>`;
+            button.textContent = 'Hide Hint';
+        } else {
+            hintDiv.style.display = 'none';
+            button.textContent = 'Show Hint';
+        }
+    }
+</script>
+</body>
+</html>
